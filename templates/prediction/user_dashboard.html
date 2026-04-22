@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="display:flex; flex-direction:column; min-height:calc(100vh - 80px);">
+
+```
+<!-- Header -->
+<div style="text-align:center; margin-top:2rem;">
+    <h2 style="color:white;">Welcome {{ user.username }}</h2>
+    <p style="color:#cbd5f5; margin-bottom:2rem;">
+        Oral Cancer Detection System Dashboard
+    </p>
+</div>
+
+<!-- Dashboard Options -->
+<div style="
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:2rem;
+    margin-top:auto;
+    padding-bottom:2rem;
+">
+
+    <!-- User Details -->
+    <a href="{% url 'user_details' %}" style="
+        background:white;
+        color:#111;
+        text-align:center;
+        padding:2rem;
+        border-radius:12px;
+        text-decoration:none;
+        box-shadow:0 10px 20px rgba(0,0,0,0.2);
+        transition:0.3s;
+    ">
+        <i class="fa-solid fa-address-card" style="font-size:40px; margin-bottom:10px; color:#6366f1;"></i>
+        <h3>User Details</h3>
+        <p style="color:#555; font-size:0.9rem;">
+            View your registered profile information.
+        </p>
+    </a>
+
+    <!-- Prediction -->
+    <a href="{% url 'make_prediction' %}" style="
+        background:white;
+        color:#111;
+        text-align:center;
+        padding:2rem;
+        border-radius:12px;
+        text-decoration:none;
+        box-shadow:0 10px 20px rgba(0,0,0,0.2);
+    ">
+        <i class="fa-solid fa-magnifying-glass-chart" style="font-size:40px; margin-bottom:10px; color:#6366f1;"></i>
+        <h3>Prediction</h3>
+        <p style="color:#555; font-size:0.9rem;">
+            Upload a model image and run the detection logic.
+        </p>
+    </a>
+
+    <!-- History -->
+    <a href="{% url 'my_history' %}" style="
+        background:white;
+        color:#111;
+        text-align:center;
+        padding:2rem;
+        border-radius:12px;
+        text-decoration:none;
+        box-shadow:0 10px 20px rgba(0,0,0,0.2);
+    ">
+        <i class="fa-solid fa-clock-rotate-left" style="font-size:40px; margin-bottom:10px; color:#6366f1;"></i>
+        <h3>History</h3>
+        <p style="color:#555; font-size:0.9rem;">
+            Review what you have previously searched or predicted.
+        </p>
+    </a>
+
+</div>
+```
+
+</div>
+
+{% endblock %}

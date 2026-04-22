@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Oral Cancer Detection System{% endblock %}</title>
+
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/utils.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    {% if user.is_authenticated %}
+    <nav class="navbar">
+
+        <a href="javascript:history.back()" class="navbar-brand">
+            <i class="fa-solid fa-tooth"></i> Oral Cancer Detection System
+        </a>
+
+        <div class="nav-links">
+
+
+            <!-- Home Button -->
+            {% if user.is_superuser %}
+            <a href="{% url 'admin_dashboard' %}" class="btn btn-primary btn-sm"
+                style="display:inline-block;width:auto;">
+                <i class="fa-solid fa-house"></i> Home
+            </a>
+            {% else %}
+            <a href="{% url 'user_dashboard' %}" class="btn btn-primary btn-sm"
+                style="display:inline-block;width:auto;">
+                <i class="fa-solid fa-house"></i> Home
+            </a>
+            {% endif %}
+
+            <!-- Logout -->
+            <a href="{% url 'logout' %}" class="btn btn-danger btn-sm" style="display:inline-block;width:auto;">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </a>
+
+        </div>
+
+    </nav>
+    {% endif %}
+
+    <div class="container">
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+
+    </div>
+
+    <style>
+        body {
+            background-image: linear-gradient(rgba(15, 23, 42, 0.70), rgba(15, 23, 42, 0.85)),
+            url('{% static "images/oral_cancer_bg.png" %}');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        #bg-canvas {
+            display: none;
+        }
+    </style>
+
+</body>
+
+</html>

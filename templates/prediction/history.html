@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="glass-card" style="margin-top: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div>
+            <h2>{{ title }}</h2>
+            <p style="color: var(--text-muted);">View records of previous predictions.</p>
+        </div>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>User</th>
+                    <th>Image</th>
+                    <th>Prediction</th>
+                    <th>Risk %</th>
+                    <th>Status</th>
+                    {% if user.role == 'admin' or user.is_superuser %}
+                    <th>Delete</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in history %}
+                <tr>
+                    <td>{{ item.created_at|date:"M d, Y H:i" }}</td>
+                    <td>{{ item.user.username }}</td>
+                    <td><a href="{{ item.image.url }}" target="_blank" style="color: var(--primary-color);">View Image</a></td>
+                    <td>{{ item.prediction_result }}</td>
+                    <td>{{ item.risk_percentage }}%</td>
+                    <td>
+                        <span class="badge {% if item.is_high_risk %}badge-risk-high{% else %}badge-risk-low{% endif %}">
+                            {% if item.is_high_risk %}High Risk{% else %}Low Risk{% endif %}
+                        </span>
+                    </td>
+                    {% if user.role == 'admin' or user.is_superuser %}
+                    <td>
+                        <a href="{% url 'delete_history' item.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Delete this record?');"><i class="fa-solid fa-trash"></i></a>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; color: var(--text-muted);">No history records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="auth-container" style="min-height: calc(100vh - 80px);">
+    <div class="glass-card auth-card" style="max-width: 600px;">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h2>Analysis Result</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Deep Learning Model Output</p>
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 1rem;">
+            <img src="{{ prediction.image.url }}" alt="Uploaded Image" style="max-width: 100%; border-radius: 8px; border: 1px solid var(--border-color);">
+        </div>
+        <div class="prediction-result-box">
+            
+            {% if risk_level == 'Low' %}
+                <h3 class="text-success" style="margin-bottom: 0.5rem; font-size: 1.5rem;">Status: {{ status }}</h3>
+            {% elif risk_level == 'Medium' %}
+                <h3 class="text-warning" style="margin-bottom: 0.5rem; font-size: 1.5rem;">Status: {{ status }}</h3>
+            {% else %}
+                <h3 class="text-danger" style="margin-bottom: 0.5rem; font-size: 1.5rem;">Status: {{ status }}</h3>
+            {% endif %}
+
+            <p style="font-size: 1.1rem; margin-bottom: 1rem;"><strong style="color:var(--text-main);">Type:</strong> {{ cancer_type }}</p>
+            <p style="color: var(--text-muted);">Risk Percentage: <strong style="color: var(--text-main);">{{ prediction.risk_percentage }}%</strong></p>
+            
+            <div class="risk-meter">
+                {% if risk_level == 'Low' %}
+                    <div class="risk-fill bg-success" style="width:25%"></div>
+                {% elif risk_level == 'Medium' %}
+                    <div class="risk-fill bg-warning" style="width:50%"></div>
+                {% else %}
+                    <div class="risk-fill bg-danger" style="width:75%"></div>
+                {% endif %}
+            </div>
+
+            <div style="margin-top: 1.5rem;">
+                {% if risk_level == 'Low' %}
+                    <span style="font-size: 1.25rem; font-weight: 700; padding: 0.5rem 1.5rem;" class="badge badge-risk-low">Low Risk</span>
+                {% elif risk_level == 'Medium' %}
+                    <span style="font-size: 1.25rem; font-weight: 700; padding: 0.5rem 1.5rem;" class="badge badge-risk-medium">Medium Risk</span>
+                {% else %}
+                    <span style="font-size: 1.25rem; font-weight: 700; padding: 0.5rem 1.5rem;" class="badge badge-risk-high">High Risk</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem; display: flex; justify-content: center; gap: 1rem;">
+            <a href="{% url 'make_prediction' %}" class="btn btn-primary">Make Another Prediction</a>
+            <a href="{% url 'user_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

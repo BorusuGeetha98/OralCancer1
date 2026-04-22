@@ -1,0 +1,17 @@
+# Python
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.sqlite3
+
+# Node/ReactApp
+ReactApp/node_modules/
+ReactApp/.expo/
+ReactApp/android/
+ReactApp/ios/
+
+# Large Files
+*.h5
+*.h5.zip
+media/

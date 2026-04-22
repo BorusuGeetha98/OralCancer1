@@ -1,0 +1,6 @@
+@echo off
+echo Stopping any running Django server on port 8000...
+for /f "tokens=5" %%a in ('netstat -aon ^| find "8000" ^| find "LISTENING"') do taskkill /f /pid %%a
+echo Starting Django Server for Mobile App...
+python manage.py runserver 0.0.0.0:8000
+pause
