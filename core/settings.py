@@ -28,10 +28,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = [
-    "https://oralcancer-production.up.railway.app",
+    "https://oralcancer1-production.up.railway.app",
     "https://*.loca.lt"
 ]
-
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Application definition
 
 INSTALLED_APPS = [
