@@ -8,7 +8,7 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <WebView 
-        source={{ uri: 'https://oralcancer1-production.up.railway.app' }} 
+        source={{ uri: 'https://oralcancer-main-production.up.railway.app' }} 
         style={styles.webview}
         onLoadStart={() => setLoading(true)}
         onLoadEnd={() => setLoading(false)}

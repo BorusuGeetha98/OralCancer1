@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = [
-    "https://oralcancer1-production.up.railway.app",
+    "https://oralcancer-main-production.up.railway.app",
     "https://*.up.railway.app",
     "https://*.loca.lt"
 ]
