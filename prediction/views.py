@@ -281,10 +281,8 @@ def predict_actual(image_field):
         pred = float(model.predict(img_array)[0][0])
         print(f"Raw Model Prediction: {pred}")
         
-        # Based on alphabetical order: 'cancer' (0), 'non_cancer' (1)
-        # 'pred' is probability of class 1 (Non-cancer).
-        # So Risk (Cancer) = 1.0 - pred
-        risk_percentage = round((1.0 - pred) * 100, 2)
+        # The trained model outputs probability of cancer directly.
+        risk_percentage = round(pred * 100, 2)
         
         # Map risk percentage to the 5 classes
         if risk_percentage <= 30.0:
