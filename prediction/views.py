@@ -12,6 +12,9 @@ from django.contrib.auth.forms import AuthenticationForm
 from .models import CustomUser, PredictionHistory
 from .forms import UserRegistrationForm, UserEditForm, PredictionForm
 
+def home(request):
+    return render(request, 'prediction/home.html')
+
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -217,17 +220,17 @@ def mock_predict(image_field):
         status = "Non-Cancer"
         cancer_type = "Non-cancer"
         is_high_risk = False
-    elif risk_percentage <= 50.0:
+    elif risk_percentage <= 40.0:
         status = "Low Risk"
         cancer_type = "Thrush"
         is_high_risk = False
     elif risk_percentage <= 70.0:
         status = "Moderate Risk"
-        cancer_type = "Lichens"
+        cancer_type = "Leukoplakia"
         is_high_risk = False
     elif risk_percentage <= 85.0:
         status = "High Risk"
-        cancer_type = "Leukoplakia"
+        cancer_type = "Lichens"
         is_high_risk = True
     else:
         status = "Cancer"
@@ -278,28 +281,27 @@ def predict_actual(image_field):
         pred = float(model.predict(img_array)[0][0])
         print(f"Raw Model Prediction: {pred}")
         
-        # Based on training data organization (alphabetical folders):
-        # 'cancer' -> index 0, 'non_cancer' -> index 1
-        # The model output 'pred' is the probability of class 1 (Non-Cancer).
-        # Therefore, Risk (Cancer probability) = 1.0 - pred.
+        # Based on alphabetical order: 'cancer' (0), 'non_cancer' (1)
+        # 'pred' is probability of class 1 (Non-cancer).
+        # So Risk (Cancer) = 1.0 - pred
         risk_percentage = round((1.0 - pred) * 100, 2)
         
-        # Map risk percentage to the 5 requested classes
+        # Map risk percentage to the 5 classes
         if risk_percentage <= 30.0:
             status = "Non-Cancer"
             c_type = "Non-cancer"
             is_high_risk = False
-        elif risk_percentage <= 50.0:
+        elif risk_percentage <= 40.0:
             status = "Low Risk"
             c_type = "Thrush"
             is_high_risk = False
         elif risk_percentage <= 70.0:
             status = "Moderate Risk"
-            c_type = "Lichens"
+            c_type = "Leukoplakia"
             is_high_risk = False
         elif risk_percentage <= 85.0:
             status = "High Risk"
-            c_type = "Leukoplakia"
+            c_type = "Lichens"
             is_high_risk = True
         else:
             status = "Cancer"
@@ -330,9 +332,9 @@ def make_prediction(request):
             prediction.save()
             
             risk_level = "Low"
-            if r_pct > 65:
+            if status in ["Cancer", "High Risk"]:
                 risk_level = "High"
-            elif r_pct > 30:
+            elif status == "Moderate Risk":
                 risk_level = "Medium"
                 
             return render(request, 'prediction/prediction_result.html', {

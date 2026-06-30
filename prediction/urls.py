@@ -35,6 +35,6 @@ urlpatterns = [
     path('api/register/', views.api_register, name='api_register'),
     path('api/history/', views.api_history, name='api_history'),
     
-    # Default redirect
-    path('', views.login_view, name='home'),
+    # Default home page
+    path('', views.home, name='home'),
 ]
