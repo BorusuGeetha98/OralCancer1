@@ -282,8 +282,36 @@ def predict_actual(image_field):
         print(f"Raw Model Prediction: {pred}")
         
         # Model outputs LOW value for Cancer, HIGH value for Non-Cancer.
-        # So Risk (Cancer) = 1.0 - pred
-        risk_percentage = round((1.0 - pred) * 100, 2)
+        # So Cancer Risk = 1.0 - pred
+        cancer_risk = 1.0 - pred
+
+        # --- Visual assist: detect strong red/dark oral lesion areas ---
+        # Only used to boost score when model is uncertain AND clear lesion signs exist.
+        img_np = np.array(img)  # shape (224, 224, 3), values 0-255
+        r = img_np[:, :, 0].astype(float)
+        g = img_np[:, :, 1].astype(float)
+        b = img_np[:, :, 2].astype(float)
+
+        # Strong red lesion pixels (red dominates significantly)
+        red_mask = (r > 130) & (r > g * 1.6) & (r > b * 1.6)
+        red_ratio = red_mask.sum() / (224 * 224)
+
+        # Very dark pixels (necrotic area)
+        dark_mask = (r < 50) & (g < 50) & (b < 50)
+        dark_ratio = dark_mask.sum() / (224 * 224)
+
+        # Visual boost only when strong lesion evidence (keep small to avoid false positives)
+        visual_boost = min(red_ratio * 1.5 + dark_ratio * 2.0, 0.25)
+        print(f"Visual boost (red={red_ratio:.3f}, dark={dark_ratio:.3f}): {visual_boost:.3f}")
+
+        # Model is primary; visual gives small boost when model is uncertain
+        model_certainty = abs(pred - 0.5) * 2   # 0=uncertain, 1=certain
+        # When model is certain (certainty→1), use model fully. When uncertain, add visual boost.
+        final_risk = cancer_risk + visual_boost * (1.0 - model_certainty)
+        final_risk = max(0.0, min(final_risk, 1.0))
+        print(f"Model certainty: {model_certainty:.3f} | Final Risk: {round(final_risk*100,2)}%")
+
+        risk_percentage = round(final_risk * 100, 2)
         
         # Map risk percentage to the 5 classes
         if risk_percentage <= 30.0:
