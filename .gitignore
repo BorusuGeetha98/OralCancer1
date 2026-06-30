@@ -12,6 +12,6 @@ ReactApp/android/
 ReactApp/ios/
 
 # Large Files
-*.h5
+# *.h5        # Removed so model deploys to Railway
 *.h5.zip
 media/
